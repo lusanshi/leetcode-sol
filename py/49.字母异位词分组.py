@@ -7,16 +7,23 @@
 # @lc code=start
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        asc_sum = lambda x: sum(map(ord, x))
-        ret = []
+        from functools import reduce
+        id = lambda s: reduce(lambda x, y: x * y, map(lambda i: i + 255, map(ord, s)))
+        hdic = {}
         for i in strs:
-            for group in ret:
-                if set(group[0]) == set(i) and asc_sum(group[0]) == asc_sum(i):
-                        group.append(i)
-                        break
+            if not i:
+                fp = 0
             else:
-                ret.append([i])
+                fp = id(i)
+            if fp in hdic:
+                hdic[fp].append(i)
 
+            else:
+                hdic[fp] = [i]
+
+        ret = []
+        for i in hdic:
+            ret.append(hdic[i])
         return ret
         
 # @lc code=end
